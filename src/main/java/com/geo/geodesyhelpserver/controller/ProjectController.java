@@ -12,6 +12,8 @@ public class ProjectController {
 
     @PostMapping(path = "/createProject",consumes = "application/json", produces = "application/json")
     public String createProject(@RequestBody NewProjectDto project){
+
+
         System.out.println(getJsonString(project));
         return "{" +
                 "\"status\": \"success\"" +

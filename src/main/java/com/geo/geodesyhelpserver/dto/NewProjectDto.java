@@ -1,10 +1,7 @@
 package com.geo.geodesyhelpserver.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.geo.geodesyhelpserver.config.LocalDateTimeDeserializer;
 import com.geo.geodesyhelpserver.config.LocalDateTimeSerializer;
-import com.geo.geodesyhelpserver.model.project.ProjectFile;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +10,7 @@ public class NewProjectDto {
     private String name;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime date;
-    private ProjectFile projectFile;
+    private ProjectFileDto projectFile;
 
     public String getName() {
         return name;
@@ -31,11 +28,11 @@ public class NewProjectDto {
         this.date = date;
     }
 
-    public ProjectFile getProjectFile() {
+    public ProjectFileDto getProjectFile() {
         return projectFile;
     }
 
-    public void setProjectFile(ProjectFile projectFile) {
+    public void setProjectFile(ProjectFileDto projectFile) {
         this.projectFile = projectFile;
     }
 }
