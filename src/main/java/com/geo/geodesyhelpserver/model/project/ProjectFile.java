@@ -16,6 +16,16 @@ public class ProjectFile extends BaseEntity {
     @Type(type = "org.hibernate.type.TextType")
     private String base64;
 
+    public ProjectFile() {
+    }
+
+    public ProjectFile(String name, Long size, String type, String base64) {
+        this.name = name;
+        this.size = size;
+        this.type = type;
+        this.base64 = base64;
+    }
+
     public String getName() {
         return name;
     }
