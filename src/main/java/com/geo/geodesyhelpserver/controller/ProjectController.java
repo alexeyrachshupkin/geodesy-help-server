@@ -4,10 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geo.geodesyhelpserver.dto.NewProjectDto;
 import com.geo.geodesyhelpserver.dto.RequestSaveProjectDto;
+import com.geo.geodesyhelpserver.model.project.Coordinate;
 import com.geo.geodesyhelpserver.model.project.Project;
 import com.geo.geodesyhelpserver.model.project.ProjectFile;
+import com.geo.geodesyhelpserver.service.CoordinateService;
+import com.geo.geodesyhelpserver.service.ProjectFileService;
 import com.geo.geodesyhelpserver.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +20,14 @@ import java.util.List;
 public class ProjectController {
 
     private ProjectService projectService;
+    private ProjectFileService projectFileService;
+    private CoordinateService coordinateService;
 
     @Autowired
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, ProjectFileService projectFileService, CoordinateService coordinateService) {
         this.projectService = projectService;
+        this.projectFileService = projectFileService;
+        this.coordinateService = coordinateService;
     }
 
     @PostMapping(path = "/createProject",consumes = "application/json", produces = "application/json")
@@ -29,7 +37,9 @@ public class ProjectController {
                 new ProjectFile(projectDto.getProjectFile().getName(),projectDto.getProjectFile().getSize(),
                         projectDto.getProjectFile().getType(),projectDto.getProjectFile().getBase64()));
         project = projectService.saveOrUpdate(project);
-        if(project!=null){
+        List<Coordinate> coordinateList = projectFileService.parseProjectFile(project);
+        coordinateList = coordinateService.saveAll(coordinateList);
+        if(project!=null && coordinateList!=null && !coordinateList.isEmpty()){
             return new RequestSaveProjectDto(project.getId(),"");
         } else {
             return new RequestSaveProjectDto(null,"Ошибка при создании проекта, обратитесь к администратору!");

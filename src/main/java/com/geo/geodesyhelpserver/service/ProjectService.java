@@ -1,13 +1,18 @@
 package com.geo.geodesyhelpserver.service;
 
+import com.geo.geodesyhelpserver.model.project.Coordinate;
 import com.geo.geodesyhelpserver.model.project.Project;
+import com.geo.geodesyhelpserver.model.project.ProjectFile;
 import com.geo.geodesyhelpserver.repository.ProjectRepository;
 import com.geo.geodesyhelpserver.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.BASE64Decoder;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -28,10 +33,8 @@ public class ProjectService implements BaseService<Project,Long> {
 
     @Override
     public Project findById(Long id) {
-        if(projectRepository.findById(id).isPresent()){
-            return projectRepository.findById(id).get();
-        }
-        return null;
+        Optional<Project> projectOptional = projectRepository.findById(id);
+        return projectOptional.isPresent()?projectOptional.get():null;
     }
 
     @Override
